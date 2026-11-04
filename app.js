@@ -22,7 +22,7 @@
     document.title = P.tenThuVien;
     var tt = P.tenThuVien, nm = P.ten || "";
     if (nm && tt.indexOf(nm) === 0 && tt.length > nm.length) {
-      $("libTitle").innerHTML = esc(nm) + '<span class="h1__accent">' + esc(tt.slice(nm.length).trim()) + "</span>";
+      $("libTitle").innerHTML = esc(nm) + ' <span class="h1__accent">' + esc(tt.slice(nm.length).trim()) + "</span>";
     } else { $("libTitle").textContent = tt; }
   }
   if (P.khauHieu) $("tagline").textContent = P.khauHieu;

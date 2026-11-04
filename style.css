@@ -67,11 +67,11 @@ a { color: inherit; }
 /* Hero */
 .hero {
   padding-top: 64px; padding-bottom: 40px;
-  display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr); gap: 48px; align-items: center;
+  display: flex; flex-direction: column; gap: 40px;
 }
 .hero__card {
   background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 24px;
-  box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 20px;
+  box-shadow: var(--shadow); display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 32px; align-items: center;
 }
 .hero__who { display: flex; align-items: center; gap: 14px; }
 .hero__avatar {
@@ -80,9 +80,9 @@ a { color: inherit; }
 }
 .hero__who strong { display: block; font-size: 17px; }
 .hero__who small { color: var(--muted); font-size: 13px; }
-.hero__card .stats { margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 16px 0; border-top: 1px dashed var(--line); border-bottom: 1px dashed var(--line); }
+.hero__card .stats { margin: 0; display: grid; grid-template-columns: repeat(3, auto); gap: 8px 28px; padding: 0 32px; border-left: 1px dashed var(--line); border-right: 1px dashed var(--line); }
 .hero__card .stats dd { font-size: 26px; }
-.hero__card .stats dt { font-size: 13px; line-height: 1.35; }
+.hero__card .stats dt { font-size: 13px; line-height: 1.35; white-space: nowrap; }
 .hero__cats { display: flex; flex-direction: column; gap: 8px; }
 .hero__cats a {
   display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 14px; font-weight: 500;
@@ -91,7 +91,9 @@ a { color: inherit; }
 .hero__cats a:hover { background: var(--accent-soft); color: var(--accent); }
 .hero__cats a span:last-child { margin-left: auto; color: var(--muted); font-size: 13px; }
 @media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; gap: 32px; padding-top: 44px; }
+  .hero { gap: 32px; padding-top: 44px; }
+  .hero__card { grid-template-columns: 1fr; gap: 20px; }
+  .hero__card .stats { padding: 16px 0; border: 0; border-top: 1px dashed var(--line); border-bottom: 1px dashed var(--line); }
 }
 .eyebrow {
   display: inline-block; margin: 0 0 16px; padding: 4px 12px; border-radius: 999px;
@@ -99,14 +101,14 @@ a { color: inherit; }
 }
 h1 {
   font-family: "Lora", Georgia, serif; font-weight: 600;
-  font-size: clamp(36px, 5.2vw, 60px); line-height: 1.08; letter-spacing: -.01em;
+  font-size: clamp(36px, 6vw, 72px); line-height: 1.08; letter-spacing: -.01em;
   margin: 0 0 18px;
 }
-h1 .h1__accent { display: block; color: var(--accent); font-style: italic; font-weight: 500; }
-.hero__intro { font-size: 18px; color: var(--muted); max-width: 58ch; margin: 0 0 28px; }
+h1 .h1__accent { display: inline; color: var(--accent); font-style: italic; font-weight: 500; }
+.hero__intro { font-size: 18px; color: var(--muted); max-width: none; margin: 0 0 28px; }
 .hero__search { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
 .search {
-  flex: 1 1 340px; max-width: 520px; display: flex; align-items: center; gap: 10px;
+  flex: 1 1 340px; max-width: none; display: flex; align-items: center; gap: 10px;
   background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
   padding: 0 18px; height: 52px; box-shadow: var(--shadow);
 }
@@ -246,3 +248,5 @@ h1 .h1__accent { display: block; color: var(--accent); font-style: italic; font-
   .selects label { flex: 1 1 40%; }
   .selects select { min-width: 0; width: 100%; }
 }
+
+@media (max-width: 640px) { h1 .h1__accent { display: block; } }
