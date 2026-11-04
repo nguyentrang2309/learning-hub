@@ -61,7 +61,7 @@ window.HUB_POSTS_GHIM = [
 
 /* ---------- 3. TÀI NGUYÊN ĐỀ XUẤT ----------
    chuDe:   "Growth Marketing & AI" | "Content & Social" | "Insurtech / Bảo hiểm"  (trùng tên mảng ở mục 2)
-   loai:    "Khóa học" | "Sách" | "Newsletter" | "Báo cáo" | "Case study"
+   loai:    "Khóa học" | "Sách" | "Ebook" | "Video" | "Newsletter" | "Báo cáo" | "Case study" | "Template" | "Lộ trình" | "Công cụ học"
    capDo:   "Cơ bản" | "Trung cấp" | "Nâng cao"
    truyCap: "Miễn phí" | "Trả phí" | "Freemium"   (Freemium = có bản free, bản xịn trả phí)
    noiBat:  true để gắn nhãn "Nên xem trước"
@@ -139,6 +139,98 @@ window.HUB_RESOURCES = [
     moTa: "Học tự động hóa quy trình (automation) bằng kéo thả, không cần code."
   },
 
+  {
+    ten: "Digital Marketing Roadmap",
+    nguon: "Tomorrow Marketers Academy",
+    link: "https://www.tomorrowmarketers.org/digital-marketing-roadmap",
+    chuDe: "Growth Marketing & AI", loai: "Lộ trình", capDo: "Cơ bản", truyCap: "Miễn phí",
+    moTa: "Bản đồ các kỹ năng digital marketing cần học theo từng chặng, hợp để tự kiểm tra mình đang thiếu gì. Gợi ý từ Zoe's Learning Library."
+  },
+  {
+    ten: "Introduction to Inbound Marketing Metrics (Ebook)",
+    nguon: "Tomorrow Marketers Academy",
+    link: "https://ebook.tomorrowmarketers.org/introduction-inbound-marketing-metrics",
+    chuDe: "Growth Marketing & AI", loai: "Ebook", capDo: "Cơ bản", truyCap: "Miễn phí",
+    moTa: "Các chỉ số đo hiệu quả inbound marketing (thu hút khách tự tìm đến): traffic, lead, tỷ lệ chuyển đổi. Gợi ý từ Zoe's Learning Library."
+  },
+  {
+    ten: "Data Resource Packs: Metrics & Reporting Guide",
+    nguon: "Tomorrow Marketers Academy",
+    link: "https://www.tomorrowmarketers.org/data-resource-packs",
+    chuDe: "Growth Marketing & AI", loai: "Ebook", capDo: "Cơ bản", truyCap: "Miễn phí",
+    moTa: "Bộ tài liệu về chỉ số và cách làm báo cáo, nền tảng để đọc số liệu phễu bán hàng. Gợi ý từ Zoe's Learning Library."
+  },
+  {
+    ten: "Data to Viz: chọn biểu đồ đúng",
+    nguon: "Data to Viz",
+    link: "https://www.data-to-viz.com/",
+    chuDe: "Growth Marketing & AI", loai: "Công cụ học", capDo: "Cơ bản", truyCap: "Miễn phí",
+    moTa: "Cây quyết định giúp chọn đúng loại biểu đồ cho từng kiểu dữ liệu khi làm báo cáo marketing. Gợi ý từ Zoe's Learning Library."
+  },
+  {
+    ten: "Marketing Dashboard Examples",
+    nguon: "Coupler.io",
+    link: "https://www.coupler.io/dashboard-examples",
+    chuDe: "Growth Marketing & AI", loai: "Template", capDo: "Cơ bản", truyCap: "Miễn phí",
+    moTa: "Kho mẫu dashboard marketing (ads, SEO, CRM) để tham khảo cách trình bày chỉ số. Gợi ý từ Zoe's Learning Library."
+  },
+  {
+    ten: "AI Agents & Automation with No Code (playlist)",
+    nguon: "Futurepedia",
+    link: "https://www.youtube.com/playlist?list=PLXMuq8RQj16bGvBccTrGD2WeDeE4SM4wy",
+    chuDe: "Growth Marketing & AI", loai: "Video", capDo: "Cơ bản", truyCap: "Miễn phí",
+    moTa: "Chuỗi video dựng AI agent và tự động hóa không cần code. Gợi ý từ Zoe's Learning Library."
+  },
+  {
+    ten: "Claude Cowork Full Course: Zero To Working AI Employee",
+    nguon: "KJ Rainey (YouTube)",
+    link: "https://www.youtube.com/watch?v=C9gKWTzRukM",
+    chuDe: "Growth Marketing & AI", loai: "Video", capDo: "Cơ bản", truyCap: "Miễn phí",
+    moTa: "Khóa video hướng dẫn dùng Claude Cowork như một 'nhân viên AI' làm việc thật. Gợi ý từ Zoe's Learning Library."
+  },
+  {
+    ten: "Self-host n8n cho người mới",
+    nguon: "Nate Herk (YouTube)",
+    link: "https://www.youtube.com/watch?v=6ZB0zADNaqk",
+    chuDe: "Growth Marketing & AI", loai: "Video", capDo: "Trung cấp", truyCap: "Miễn phí",
+    moTa: "Cách tự cài n8n (công cụ tự động hóa) với chi phí thấp, bước tiếp theo sau khi quen Make. Gợi ý từ Zoe's Learning Library."
+  },
+  {
+    ten: "Blog series: Learn AI from 0",
+    nguon: "Zoe's Data & AI Lens",
+    link: "https://zoedatalens.substack.com/t/series-learn-ai-from-0",
+    chuDe: "Growth Marketing & AI", loai: "Newsletter", capDo: "Cơ bản", truyCap: "Miễn phí",
+    moTa: "Chuỗi bài tiếng Việt học AI từ con số 0 dành cho marketer. Gợi ý từ Zoe's Learning Library."
+  },
+  {
+    ten: "Blog series: n8n Automation & AI Agent",
+    nguon: "Zoe's Data & AI Lens",
+    link: "https://zoedatalens.substack.com/t/n8n-automation-and-ai-agent",
+    chuDe: "Growth Marketing & AI", loai: "Newsletter", capDo: "Trung cấp", truyCap: "Miễn phí",
+    moTa: "Chuỗi bài tiếng Việt về tự động hóa bằng n8n và AI agent, có ví dụ thực tế. Gợi ý từ Zoe's Learning Library."
+  },
+  {
+    ten: "Khóa AI Marketing",
+    nguon: "Tomorrow Marketers Academy",
+    link: "https://www.tomorrowmarketers.org/ai-marketing-course",
+    chuDe: "Growth Marketing & AI", loai: "Khóa học", capDo: "Trung cấp", truyCap: "Trả phí",
+    moTa: "Khóa tiếng Việt về ứng dụng AI vào quy trình marketing. Gợi ý từ Zoe's Learning Library."
+  },
+  {
+    ten: "Khóa Digital Performance",
+    nguon: "Tomorrow Marketers Academy",
+    link: "https://www.tomorrowmarketers.org/digital-performance-course",
+    chuDe: "Growth Marketing & AI", loai: "Khóa học", capDo: "Trung cấp", truyCap: "Trả phí",
+    moTa: "Khóa tiếng Việt về performance marketing (quảng cáo tối ưu theo kết quả đo được). Gợi ý từ Zoe's Learning Library."
+  },
+  {
+    ten: "Khóa Marketing Foundation",
+    nguon: "Tomorrow Marketers Academy",
+    link: "https://www.tomorrowmarketers.org/marketing-foundation-course/",
+    chuDe: "Growth Marketing & AI", loai: "Khóa học", capDo: "Cơ bản", truyCap: "Trả phí",
+    moTa: "Nền tảng tư duy marketing bài bản cho người muốn hệ thống lại kiến thức. Gợi ý từ Zoe's Learning Library."
+  },
+
   // ===== CONTENT & SOCIAL =====
   {
     ten: "Influence: The Psychology of Persuasion",
@@ -174,6 +266,21 @@ window.HUB_RESOURCES = [
     link: "https://www.canva.com/designschool/",
     chuDe: "Content & Social", loai: "Khóa học", capDo: "Cơ bản", truyCap: "Miễn phí",
     moTa: "Khóa ngắn về thiết kế, social media, thương hiệu cho người không chuyên thiết kế."
+  },
+
+  {
+    ten: "Khóa Content Marketing",
+    nguon: "Tomorrow Marketers Academy",
+    link: "https://www.tomorrowmarketers.org/content-marketing-course",
+    chuDe: "Content & Social", loai: "Khóa học", capDo: "Trung cấp", truyCap: "Trả phí",
+    moTa: "Khóa tiếng Việt về chiến lược và sản xuất content marketing. Gợi ý từ Zoe's Learning Library."
+  },
+  {
+    ten: "The LinkedIn Growth Playbook",
+    nguon: "Chase Dimond (YouTube)",
+    link: "https://www.youtube.com/watch?v=dZWYh0l-ysc",
+    chuDe: "Content & Social", loai: "Video", capDo: "Cơ bản", truyCap: "Miễn phí",
+    moTa: "Cách tăng trưởng kênh LinkedIn cá nhân: định vị, nhịp đăng bài, format nội dung. Gợi ý từ Zoe's Learning Library."
   },
 
   // ===== INSURTECH =====
