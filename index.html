@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thùy Trang Learning Hubs</title>
+  <meta name="description" content="Thùy Trang Learning Hubs: khóa học, sách, tài liệu và công cụ về Growth Marketing, AI, Content và Insurtech.">
+  <meta property="og:title" content="Thùy Trang Learning Hubs">
+  <meta property="og:description" content="Khóa học, tài liệu, công cụ về Growth Marketing, AI, Content và Insurtech. Cập nhật mỗi khi mình học thêm điều mới.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231f5c4a'/><text x='50' y='66' font-size='52' text-anchor='middle' fill='%23fff' font-family='Arial' font-weight='700'>T</text></svg>">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="brand" href="#top" aria-label="Về đầu trang">
+        <span class="brand__logo" id="brandLogo">T</span>
+        <span class="brand__name" id="brandName">Thùy Trang</span>
+      </a>
+      <nav class="nav" aria-label="Điều hướng chính">
+        <a href="#learning">Đang học</a>
+        <a href="#posts">Bài viết</a>
+        <a href="#library">Tài nguyên</a>
+        <a href="#tools">Công cụ</a>
+        <a href="#about">Về mình</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap">
+      <p class="eyebrow" id="tagline">Cập nhật mỗi khi mình học thêm điều mới</p>
+      <h1 id="libTitle">Thùy Trang Learning Hubs</h1>
+      <p class="hero__intro" id="intro"></p>
+      <div class="hero__search">
+        <label class="search" for="searchInput">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="searchInput" type="search" placeholder="Tìm khóa học, sách, công cụ..." autocomplete="off">
+        </label>
+        <a class="link-arrow" href="#library">Xem tất cả tài nguyên ↓</a>
+      </div>
+      <dl class="stats" id="stats"></dl>
+    </section>
+
+    <section id="learning" class="section wrap">
+      <div class="section__head">
+        <h2>Mình đang học gì</h2>
+        <p>3 mảng mình đang đào sâu. Bấm vào một mảng để xem tài nguyên liên quan.</p>
+      </div>
+      <div class="cats" id="catList"></div>
+    </section>
+
+    <section id="posts" class="section wrap" hidden>
+      <div class="section__head section__head--row">
+        <div>
+          <h2>Bài viết nổi bật</h2>
+          <p>Những bài được đọc và thả tim nhiều nhất trên Substack của mình.</p>
+        </div>
+        <a class="link-arrow" id="substackAll" href="#" target="_blank" rel="noopener">Đọc tất cả trên Substack ↗</a>
+      </div>
+      <div class="posts" id="postList"></div>
+    </section>
+
+    <section id="library" class="section wrap">
+      <div class="section__head">
+        <h2>Tài nguyên đề xuất</h2>
+        <p>Khóa học, sách, báo cáo mình giới thiệu. Thư viện sẽ lớn dần theo hành trình học: có cái mình đã học xong, có cái mình muốn khám phá sau.</p>
+      </div>
+
+      <div class="filters" role="group" aria-label="Bộ lọc">
+        <div class="chips" id="topicChips" aria-label="Chủ đề"></div>
+        <div class="selects">
+          <label>Loại
+            <select id="fType"><option value="">Tất cả</option></select>
+          </label>
+          <label>Cấp độ
+            <select id="fLevel"><option value="">Tất cả</option></select>
+          </label>
+          <label>Truy cập
+            <select id="fAccess"><option value="">Tất cả</option></select>
+          </label>
+          <button class="btn-ghost" id="resetBtn" type="button">Xóa lọc</button>
+        </div>
+      </div>
+
+      <p class="count" id="resultCount" aria-live="polite"></p>
+      <div class="grid" id="resourceGrid"></div>
+      <p class="empty" id="emptyState" hidden>Không tìm thấy tài nguyên nào. Thử bỏ bớt bộ lọc nhé.</p>
+      <div class="more"><button class="btn" id="moreBtn" type="button">Xem thêm</button></div>
+    </section>
+
+    <section id="tools" class="section wrap">
+      <div class="section__head">
+        <h2>Công cụ mình dùng</h2>
+        <p>Bộ đồ nghề hằng ngày cho nghiên cứu, làm content và tự động hóa.</p>
+      </div>
+      <div class="tools" id="toolGrid"></div>
+    </section>
+  </main>
+
+  <footer id="about" class="footer">
+    <div class="wrap footer__inner">
+      <div>
+        <h2>Thấy có ích?</h2>
+        <p id="bio"></p>
+        <p class="updated" id="updated"></p>
+      </div>
+      <div class="footer__links" id="socialLinks"></div>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
