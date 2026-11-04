@@ -18,7 +18,7 @@ window.HUB_PROFILE = {
   facebook: "",
   linkedin: "",
   // Link Substack, ví dụ: "https://thuytrang.substack.com"
-  substack: "",
+  substack: "https://tranggrowthnotes.substack.com",
   email: "",
   capNhatLanCuoi: "04/11/2026"
 };
