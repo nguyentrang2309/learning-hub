@@ -48,11 +48,16 @@ window.HUB_CATEGORIES = [
 ];
 
 /* ---------- 2b. BÀI VIẾT NỔI BẬT TRÊN SUBSTACK ----------
-   Web TỰ ĐỘNG lấy bài phổ biến nhất từ Substack của bạn mỗi ngày
-   (chỉ cần điền link Substack ở mục HUB_PROFILE phía trên).
-   Danh sách dưới đây chỉ dùng khi chưa lấy được bài tự động.
+   Cách hoạt động:
+   - Bài bạn GHIM dưới đây luôn hiện đầu tiên (nhãn "Nổi bật").
+   - Còn chỗ trống thì web tự điền bài MỚI NHẤT từ Substack (nhãn "Mới"), tối đa 6 bài.
+   Chỉ cần dán link bài. tieuDe, moTa, anh để trống "" thì web tự lấy từ Substack.
+   Ví dụ:
+   { link: "https://tranggrowthnotes.substack.com/p/ten-bai", tieuDe: "", moTa: "" },
    ------------------------------------------------------ */
-window.HUB_POSTS_FALLBACK = [];
+window.HUB_POSTS_GHIM = [
+
+];
 
 /* ---------- 3. TÀI NGUYÊN ĐỀ XUẤT ----------
    chuDe:   "Growth Marketing & AI" | "Content & Social" | "Insurtech / Bảo hiểm"  (trùng tên mảng ở mục 2)

@@ -33,17 +33,26 @@
 
   <main id="top">
     <section class="hero wrap">
-      <p class="eyebrow" id="tagline">Cập nhật mỗi khi mình học thêm điều mới</p>
-      <h1 id="libTitle">Thùy Trang Learning Hubs</h1>
-      <p class="hero__intro" id="intro"></p>
-      <div class="hero__search">
-        <label class="search" for="searchInput">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input id="searchInput" type="search" placeholder="Tìm khóa học, sách, công cụ..." autocomplete="off">
-        </label>
-        <a class="link-arrow" href="#library">Xem tất cả tài nguyên ↓</a>
+      <div class="hero__main">
+        <p class="eyebrow" id="tagline">Cập nhật mỗi khi mình học thêm điều mới</p>
+        <h1 id="libTitle">Thùy Trang<span class="h1__accent">Learning Hubs</span></h1>
+        <p class="hero__intro" id="intro"></p>
+        <div class="hero__search">
+          <label class="search" for="searchInput">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input id="searchInput" type="search" placeholder="Tìm khóa học, sách, công cụ..." autocomplete="off">
+          </label>
+          <a class="link-arrow" href="#library">Xem tất cả tài nguyên ↓</a>
+        </div>
       </div>
-      <dl class="stats" id="stats"></dl>
+      <aside class="hero__card" aria-label="Tổng quan">
+        <div class="hero__who">
+          <span class="hero__avatar" id="heroAvatar">T</span>
+          <div><strong id="heroName">Thùy Trang</strong><small>Growth Marketing · AI · Insurtech</small></div>
+        </div>
+        <dl class="stats" id="stats"></dl>
+        <div class="hero__cats" id="heroCats"></div>
+      </aside>
     </section>
 
     <section id="learning" class="section wrap">
@@ -58,7 +67,7 @@
       <div class="section__head section__head--row">
         <div>
           <h2>Bài viết nổi bật</h2>
-          <p>Những bài được đọc và thả tim nhiều nhất trên Substack của mình.</p>
+          <p>Những bài mình chọn lọc và bài mới nhất trên Substack của mình.</p>
         </div>
         <a class="link-arrow" id="substackAll" href="#" target="_blank" rel="noopener">Đọc tất cả trên Substack ↗</a>
       </div>

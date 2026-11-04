@@ -18,7 +18,13 @@
 
   /* ---------- Profile ---------- */
   if (P.ten) { $("brandName").textContent = P.ten; $("brandLogo").textContent = P.ten.trim().split(" ").pop().charAt(0); }
-  if (P.tenThuVien) { $("libTitle").textContent = P.tenThuVien; document.title = P.tenThuVien; }
+  if (P.tenThuVien) {
+    document.title = P.tenThuVien;
+    var tt = P.tenThuVien, nm = P.ten || "";
+    if (nm && tt.indexOf(nm) === 0 && tt.length > nm.length) {
+      $("libTitle").innerHTML = esc(nm) + '<span class="h1__accent">' + esc(tt.slice(nm.length).trim()) + "</span>";
+    } else { $("libTitle").textContent = tt; }
+  }
   if (P.khauHieu) $("tagline").textContent = P.khauHieu;
   $("intro").textContent = P.gioiThieu || "";
   $("bio").textContent = P.bio || "";
@@ -40,6 +46,13 @@
   ];
   $("stats").innerHTML = stats.map(function (s) {
     return "<div><dt>" + s[1] + "</dt><dd>" + s[0] + "</dd></div>";
+  }).join("");
+
+  /* ---------- Hero card ---------- */
+  if (P.ten) { $("heroName").textContent = P.ten; $("heroAvatar").textContent = $("brandLogo").textContent; }
+  $("heroCats").innerHTML = CATS.map(function (c) {
+    var n = RES.filter(function (r) { return r.chuDe === c.ten; }).length;
+    return '<a href="#library" data-topic="' + esc(c.ten) + '"><span aria-hidden="true">' + esc(c.bieuTuong || "•") + "</span><span>" + esc(c.ten) + "</span><span>" + n + "</span></a>";
   }).join("");
 
   /* ---------- Categories (Mình đang học gì) ---------- */
@@ -129,6 +142,13 @@
   });
   $("moreBtn").addEventListener("click", function () { state.shown += PAGE; render(); });
 
+  $("heroCats").addEventListener("click", function (e) {
+    var b = e.target.closest("a"); if (!b) return;
+    e.preventDefault();
+    var chip = $("topicChips").querySelector('.chip[data-topic="' + b.getAttribute("data-topic") + '"]');
+    if (chip) chip.click();
+    $("library").scrollIntoView();
+  });
   $("catList").addEventListener("click", function (e) {
     var b = e.target.closest(".cat"); if (!b) return;
     var t = b.getAttribute("data-topic");
@@ -144,26 +164,65 @@
     var x = new Date(d); if (isNaN(x)) return "";
     return ("0" + x.getDate()).slice(-2) + "/" + ("0" + (x.getMonth() + 1)).slice(-2) + "/" + x.getFullYear();
   }
+  function cleanText(html) {
+    var d = document.createElement("div"); d.innerHTML = html || "";
+    return (d.textContent || "").replace(/\s+/g, " ").trim();
+  }
+  function cut(t, n) { return t.length > n ? t.slice(0, n).replace(/\s+\S*$/, "") + "…" : t; }
+  function normUrl(u) { return String(u || "").split("?")[0].replace(/\/+$/, "").toLowerCase(); }
+
   function renderPosts(posts) {
     posts = (posts || []).filter(function (p) { return p && p.title && p.url; }).slice(0, 6);
     if (!posts.length) return;
-    var sub = (P.substack || "").replace(/\/+$/, "");
-    if (sub) $("substackAll").href = sub + "/archive?sort=top"; else $("substackAll").hidden = true;
-    $("postList").innerHTML = posts.map(function (p, i) {
+    $("postList").innerHTML = posts.map(function (p) {
       return '<article class="post">' +
         (p.image ? '<div class="post__img" style="background-image:url(\'' + esc(p.image) + '\')"></div>' : "") +
-        '<div class="post__body">' + (i < 3 ? '<span class="post__rank">Top ' + (i + 1) + "</span>" : "") + '<h3><a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.title) + "</a></h3>" +
+        '<div class="post__body">' + (p.pinned ? '<span class="post__rank">Nổi bật</span>' : '<span class="post__rank post__rank--new">Mới</span>') +
+        '<h3><a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.title) + "</a></h3>" +
         (p.subtitle ? "<p>" + esc(p.subtitle) + "</p>" : "<p></p>") +
-        '<div class="post__meta">' + (p.date ? "<span>" + fmtDate(p.date) + "</span>" : "") +
-        (p.likes ? "<span>♥ " + p.likes + "</span>" : "") + (p.comments ? "<span>💬 " + p.comments + "</span>" : "") + "</div>" +
+        '<div class="post__meta">' + (p.date ? "<span>" + fmtDate(p.date) + "</span>" : "") + "<span>Đọc bài ↗</span></div>" +
         "</div></article>";
     }).join("");
     $("posts").hidden = false;
   }
-  fetch("posts.json", { cache: "no-store" })
-    .then(function (r) { return r.ok ? r.json() : []; })
-    .then(function (d) { renderPosts(d && d.length ? d : window.HUB_POSTS_FALLBACK); })
-    .catch(function () { renderPosts(window.HUB_POSTS_FALLBACK); });
+
+  var sub = (P.substack || "").replace(/\/+$/, "");
+  if (sub) $("substackAll").href = sub + "/archive"; else $("substackAll").hidden = true;
+
+  // 1) Bài bạn tự ghim trong data.js
+  var pinned = (window.HUB_POSTS_GHIM || []).filter(function (p) { return p && p.link; }).map(function (p) {
+    return { title: p.tieuDe || "", url: p.link, subtitle: p.moTa || "", image: p.anh || "", date: p.ngay || "", pinned: true };
+  });
+
+  // 2) Bài mới nhất lấy tự động từ RSS của Substack
+  function loadLatest() {
+    if (!sub) return Promise.resolve([]);
+    var api = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(sub + "/feed");
+    return fetch(api).then(function (r) { return r.json(); }).then(function (d) {
+      if (!d || d.status !== "ok") return [];
+      return (d.items || []).map(function (it) {
+        return {
+          title: cleanText(it.title), url: it.link,
+          subtitle: cut(cleanText(it.description), 160),
+          image: (it.enclosure && it.enclosure.link) || it.thumbnail || "",
+          date: String(it.pubDate || "").replace(" ", "T")
+        };
+      });
+    }).catch(function () { return []; });
+  }
+
+  renderPosts(pinned);
+  loadLatest().then(function (latest) {
+    var byUrl = {};
+    latest.forEach(function (p) { byUrl[normUrl(p.url)] = p; });
+    var merged = pinned.map(function (p) {
+      var f = byUrl[normUrl(p.url)];
+      return f ? { title: p.title || f.title, url: p.url, subtitle: p.subtitle || f.subtitle, image: p.image || f.image, date: p.date || f.date, pinned: true } : p;
+    });
+    var seen = {}; merged.forEach(function (p) { seen[normUrl(p.url)] = 1; });
+    latest.forEach(function (p) { if (!seen[normUrl(p.url)]) merged.push(p); });
+    renderPosts(merged);
+  });
 
   /* ---------- Tools ---------- */
   $("toolGrid").innerHTML = TOOLS.map(function (t) {

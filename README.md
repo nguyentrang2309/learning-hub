@@ -16,15 +16,17 @@ Các phần trong `data.js`:
 |---|---|
 | `HUB_PROFILE` | Tên, giới thiệu, link Substack/Facebook/LinkedIn/Email, ngày cập nhật |
 | `HUB_CATEGORIES` | Mục "Mình đang học gì": 3 mảng chính, bấm vào sẽ lọc tài nguyên đúng mảng |
-| `HUB_POSTS_FALLBACK` | Bài viết dự phòng, chỉ dùng khi chưa lấy được bài tự động từ Substack |
+| `HUB_POSTS_GHIM` | Bài Substack bạn muốn ghim lên đầu mục "Bài viết nổi bật" |
 | `HUB_RESOURCES` | Kho tài nguyên có bộ lọc Chủ đề / Loại / Cấp độ / Truy cập |
 | `HUB_TOOLS` | Công cụ mình dùng |
 
 Mẹo: chủ đề, loại, cấp độ mới sẽ tự xuất hiện trong bộ lọc, không cần sửa chỗ nào khác.
 
-## Bài viết nổi bật từ Substack (tự động)
+## Bài viết nổi bật từ Substack
 
-Điền link Substack vào `substack: "..."` trong `data.js`. Mỗi sáng (khoảng 6h) GitHub tự lấy 6 bài được thả tim nhiều nhất và cập nhật vào `posts.json`. Muốn cập nhật ngay: tab **Actions** → **Cập nhật bài Substack** → **Run workflow**. Khi chưa có bài, phần này tự ẩn.
+- Bài bạn ghim trong `HUB_POSTS_GHIM` (file `data.js`) luôn hiện đầu, nhãn "Nổi bật".
+- Chỗ còn trống web tự điền bài mới nhất từ Substack (qua RSS, dịch vụ rss2json.com), tối đa 6 bài.
+- Chưa có bài nào thì mục này tự ẩn.
 
 ## Cấu trúc
 
@@ -32,5 +34,4 @@ Mẹo: chủ đề, loại, cấp độ mới sẽ tự xuất hiện trong bộ
 - `style.css` màu sắc, font, bố cục (tự đổi sang nền tối khi máy để chế độ Dark)
 - `app.js` tìm kiếm, bộ lọc, hiển thị
 - `data.js` nội dung
-- `posts.json` bài Substack (máy tự ghi, không cần sửa)
-- `scripts/fetch_posts.py` + `.github/workflows/update-posts.yml` bộ lấy bài tự động
+- `posts.json`, `scripts/`, `.github/workflows/` bộ lấy bài dự phòng (hiện bị Substack chặn, không cần đụng)
