@@ -28,6 +28,15 @@ Có **2 cách** cập nhật nội dung:
 - Đổi tên một mảng thì các tài nguyên thuộc mảng đó tự đổi theo.
 - Ngày "Cập nhật lần cuối" ở chân trang tự điền khi lưu.
 
+**Theo dõi tiến độ học (tab "Tiến độ học 🔒", chỉ admin thấy):**
+
+- Bấm **+ Theo dõi khóa** → chọn tài nguyên có sẵn trong thư viện (khóa chưa có thì thêm ở tab Tài nguyên trước) → chọn trạng thái.
+- Mỗi khóa có: **trạng thái** (Muốn học / Đang học / Đã xong), **thanh % hoàn thành** (kéo để chỉnh), **ngày bắt đầu**, **ngày hoàn thành**.
+- Tự động: kéo % lên trên 0 → chuyển "Đang học" và điền ngày bắt đầu; kéo tới 100% → chuyển "Đã xong" và điền ngày hoàn thành.
+- Đầu tab có tổng quan: số khóa đang học, tiến độ trung bình, số khóa đã xong, muốn học. Lọc theo trạng thái ở ô bên dưới.
+- Bấm **Lưu & xuất bản** để lưu. Trang công khai **không** hiển thị phần này.
+- Dữ liệu lưu ở file `progress.json`. Repo đang công khai nên người cố tình tìm trong repo vẫn đọc được, chỉ là không hiện trên trang web.
+
 **Vì sao chỉ admin sửa được?** Trang quản trị ai cũng mở được, nhưng muốn lưu phải có mã khóa với quyền ghi vào repo. Chỉ tài khoản GitHub của bạn tạo được mã đó.
 
 **Bảo mật mã khóa:**
@@ -187,6 +196,7 @@ Phần này nằm trong `style.css` / `app.js`, nhờ Claude sửa sẽ an toàn
 | File | Vai trò | Có cần sửa? |
 |---|---|---|
 | `admin.html` | Trang quản trị | Không |
+| `progress.json` | Tiến độ học (trang quản trị tự tạo và ghi) | Không |
 | `data.js` | Toàn bộ nội dung (trang quản trị tự ghi vào file này) | Chỉ khi sửa tay |
 | `index.html` | Khung trang | Hiếm khi |
 | `style.css` | Màu sắc, font, bố cục (tự đổi nền tối theo máy) | Không |

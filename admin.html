@@ -73,6 +73,28 @@ dialog::backdrop{background:rgba(20,24,22,.45)}
 .msg--err{background:var(--danger-soft);color:var(--danger)}
 .msg--ok{background:var(--accent-soft);color:var(--accent)}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;font-weight:500;z-index:50;max-width:calc(100vw - 32px)}
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.stat b{display:block;font-family:Lora,Georgia,serif;font-size:26px;color:var(--accent);line-height:1.2}
+.stat span{font-size:13px;color:var(--muted)}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 16px;align-items:center}
+.pcard__name{font-weight:600}
+.pcard__name a{color:inherit;text-decoration:none}
+.pcard__meta{font-size:12px;color:var(--muted)}
+.pcard__ctl{grid-column:1/-1;display:grid;grid-template-columns:150px minmax(0,1fr) 150px 150px;gap:10px;align-items:end}
+.pcard__ctl label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);font-weight:600}
+.pcard__ctl select,.pcard__ctl input[type=date]{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 8px;width:100%}
+.prog{display:flex;align-items:center;gap:10px}
+.prog input[type=range]{flex:1;accent-color:var(--accent)}
+.prog output{width:44px;text-align:right;font-weight:700;color:var(--accent)}
+.bar{height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden;grid-column:1/-1}
+.bar span{display:block;height:100%;background:var(--accent)}
+.st{font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.st--dang-hoc{background:var(--accent-soft);color:var(--accent)}
+.st--da-xong{background:var(--surface-2);color:var(--muted)}
+.st--muon-hoc{background:var(--warm-soft);color:var(--warm)}
+.private{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--muted);background:var(--surface-2);border-radius:10px;padding:10px 12px;margin-bottom:16px}
+@media (max-width:760px){.stats4{grid-template-columns:repeat(2,1fr)}.pcard__ctl{grid-template-columns:1fr 1fr}.pcard__ctl .prog-wrap{grid-column:1/-1;order:-1}}
 .empty{color:var(--muted);text-align:center;padding:30px;border:1px dashed var(--line);border-radius:12px}
 @media (max-width:640px){#saveBtn{padding:8px 12px}.top__in{gap:8px}.wrap{padding-left:16px;padding-right:16px}.form{grid-template-columns:1fr}.top h1{font-size:17px}.hide-sm{display:none}}
 </style>
@@ -120,6 +142,7 @@ dialog::backdrop{background:rgba(20,24,22,.45)}
   <main class="wrap">
     <nav class="tabs" role="tablist">
       <button class="tab" role="tab" data-tab="resources" aria-selected="true">Tài nguyên</button>
+      <button class="tab" role="tab" data-tab="progress" aria-selected="false">Tiến độ học 🔒</button>
       <button class="tab" role="tab" data-tab="categories" aria-selected="false">3 mảng chính</button>
       <button class="tab" role="tab" data-tab="posts" aria-selected="false">Bài Substack ghim</button>
       <button class="tab" role="tab" data-tab="tools" aria-selected="false">Công cụ</button>
@@ -140,10 +163,11 @@ dialog::backdrop{background:rgba(20,24,22,.45)}
 <script>
 (function () {
   var OWNER = "nguyentrang2309", REPO = "learning-hub", BRANCH = "main", FILE = "data.js";
+  var PFILE = "progress.json";
   var API = "https://api.github.com/repos/" + OWNER + "/" + REPO;
   var KEY = "lh_admin_token";
 
-  var token = "", sha = "", D = null, dirty = false, tab = "resources", rFilter = { q: "", topic: "" };
+  var token = "", sha = "", D = null, P = [], pSha = "", snapD = "", snapP = "", dirty = false, tab = "resources", rFilter = { q: "", topic: "" };
   var $ = function (id) { return document.getElementById(id); };
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
 
@@ -193,6 +217,8 @@ dialog::backdrop{background:rgba(20,24,22,.45)}
     setTimeout(function () { el.remove(); }, ms || 2600);
   }
   function setDirty(v) {
+    if (v === false) { snapD = JSON.stringify(D); snapP = JSON.stringify(P); }
+    v = !!D && (JSON.stringify(D) !== snapD || JSON.stringify(P) !== snapP);
     dirty = v; $("saveBtn").disabled = !v;
     var b = $("stateBadge"); b.textContent = v ? "Có thay đổi chưa lưu" : "Đã đồng bộ"; b.className = "pill hide-sm " + (v ? "pill--dirty" : "pill--ok");
   }
@@ -209,6 +235,11 @@ dialog::backdrop{background:rgba(20,24,22,.45)}
       if (r.__status === 404) throw new Error("Mã khóa không có quyền vào repo learning-hub.");
       if (!r.content) throw new Error("Không đọc được dữ liệu (lỗi " + r.__status + ").");
       sha = r.sha; D = parseData(b64ToUtf8(r.content));
+      return gh("/contents/" + PFILE + "?ref=" + BRANCH);
+    }).then(function (r) {
+      if (r.__status === 404) { P = []; pSha = ""; return; }
+      if (!r.content) throw new Error("Không đọc được tiến độ học (lỗi " + r.__status + ").");
+      pSha = r.sha; try { P = JSON.parse(b64ToUtf8(r.content)) || []; } catch (e) { P = []; }
     });
   }
   function checkWrite() {
@@ -232,30 +263,40 @@ dialog::backdrop{background:rgba(20,24,22,.45)}
   $("tokenInput").addEventListener("keydown", function (e) { if (e.key === "Enter") $("loginBtn").click(); });
   $("logoutBtn").addEventListener("click", function () {
     if (dirty && !confirm("Còn thay đổi chưa lưu. Vẫn đăng xuất?")) return;
-    clearToken(); token = ""; D = null; setDirty(false); showLogin("");
+    clearToken(); token = ""; D = null; P = []; setDirty(false); showLogin("");
   });
 
   /* ---------- lưu ---------- */
+  function putFile(path, text, fileSha, msg) {
+    var body = { message: msg, content: utf8ToB64(text), branch: BRANCH }; if (fileSha) body.sha = fileSha;
+    return gh("/contents/" + path, { method: "PUT", body: body }).then(function (r) {
+      if (r.__status === 409 || r.__status === 422) throw new Error("conflict");
+      if (r.__status === 401) throw new Error("Mã khóa hết hạn. Hãy đăng nhập lại.");
+      if (r.__status === 403) throw new Error("Mã khóa không có quyền ghi (cần Contents: Read and write).");
+      if (!r.content) throw new Error("Lưu không thành công (lỗi " + r.__status + ").");
+      return r.content.sha;
+    });
+  }
   $("saveBtn").addEventListener("click", function () {
     var btn = this; btn.disabled = true; btn.textContent = "Đang lưu...";
-    var now = new Date(); D.profile.capNhatLanCuoi = ("0" + now.getDate()).slice(-2) + "/" + ("0" + (now.getMonth() + 1)).slice(-2) + "/" + now.getFullYear();
-    gh("/contents/" + FILE, { method: "PUT", body: { message: "Cập nhật nội dung từ trang quản trị", content: utf8ToB64(buildData(D)), sha: sha, branch: BRANCH } })
-      .then(function (r) {
-        if (r.__status === 409 || r.__status === 422) throw new Error("conflict");
-        if (r.__status === 401) throw new Error("Mã khóa hết hạn. Hãy đăng nhập lại.");
-        if (r.__status === 403) throw new Error("Mã khóa không có quyền ghi (cần Contents: Read and write).");
-        if (!r.content) throw new Error("Lưu không thành công (lỗi " + r.__status + ").");
-        sha = r.content.sha; setDirty(false);
-        toast("Đã lưu. Web cập nhật sau khoảng 1-2 phút.", 4000);
-      })
-      .catch(function (e) {
-        if (e.message === "conflict") {
-          alert("Dữ liệu trên GitHub vừa được sửa ở nơi khác. Trang sẽ tải lại bản mới nhất, thay đổi chưa lưu của bạn sẽ mất.");
-          load().then(function () { setDirty(false); render(); });
-        } else { alert(e.message); }
-        if (dirty) btn.disabled = false;
-      })
-      .then(function () { btn.textContent = "Lưu & xuất bản"; });
+    var dataChanged = JSON.stringify(D) !== snapD, progChanged = JSON.stringify(P) !== snapP;
+    var chain = Promise.resolve();
+    if (dataChanged) {
+      var now = new Date(); D.profile.capNhatLanCuoi = ("0" + now.getDate()).slice(-2) + "/" + ("0" + (now.getMonth() + 1)).slice(-2) + "/" + now.getFullYear();
+      chain = chain.then(function () { return putFile(FILE, buildData(D), sha, "Cập nhật nội dung từ trang quản trị"); }).then(function (s2) { sha = s2; snapD = JSON.stringify(D); });
+    }
+    if (progChanged) {
+      chain = chain.then(function () { return putFile(PFILE, JSON.stringify(P, null, 2) + "\n", pSha, "Cập nhật tiến độ học"); }).then(function (s3) { pSha = s3; snapP = JSON.stringify(P); });
+    }
+    chain.then(function () {
+      setDirty(); toast(dataChanged ? "Đã lưu. Web cập nhật sau khoảng 1-2 phút." : "Đã lưu tiến độ học.", 4000);
+    }).catch(function (e) {
+      if (e.message === "conflict") {
+        alert("Dữ liệu trên GitHub vừa được sửa ở nơi khác. Trang sẽ tải lại bản mới nhất, thay đổi chưa lưu của bạn sẽ mất.");
+        load().then(function () { setDirty(false); render(); });
+      } else { alert(e.message); }
+      setDirty();
+    }).then(function () { btn.textContent = "Lưu & xuất bản"; });
   });
 
   /* ---------- form dùng chung ---------- */
@@ -433,9 +474,95 @@ dialog::backdrop{background:rgba(20,24,22,.45)}
       setDirty(true); toast("Đã áp dụng. Nhớ bấm \"Lưu & xuất bản\".");
     });
   }
+  /* ---------- Tiến độ học (chỉ admin) ---------- */
+  var ST = { "muon-hoc": "Muốn học", "dang-hoc": "Đang học", "da-xong": "Đã xong" };
+  var pFilter = "";
+  function today() { var d = new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function fmtD(s) { if (!s) return ""; var p = s.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; }
+  function daysBetween(a, b) { return Math.round((new Date(b) - new Date(a)) / 86400000); }
+  function resByLink(link) { for (var i = 0; i < D.resources.length; i++) if (D.resources[i].link === link) return D.resources[i]; return null; }
+  function renderProgress() {
+    var cnt = { "muon-hoc": 0, "dang-hoc": 0, "da-xong": 0 };
+    P.forEach(function (p) { cnt[p.trangThai] = (cnt[p.trangThai] || 0) + 1; });
+    var active = P.filter(function (p) { return p.trangThai === "dang-hoc"; });
+    var avg = active.length ? Math.round(active.reduce(function (s, p) { return s + (+p.tienDo || 0); }, 0) / active.length) : 0;
+    var order = { "dang-hoc": 0, "muon-hoc": 1, "da-xong": 2 };
+    var idxs = P.map(function (_, i) { return i; }).filter(function (i) { return !pFilter || P[i].trangThai === pFilter; })
+      .sort(function (a, b) { return (order[P[a].trangThai] - order[P[b].trangThai]) || ((P[b].ngayBatDau || "").localeCompare(P[a].ngayBatDau || "")); });
+    var html = head("Tiến độ học", "Theo dõi khóa bạn đang học. Phần này chỉ hiện trong trang quản trị.", "Theo dõi khóa") +
+      '<div class="private">🔒 <span>Trang công khai không hiển thị tiến độ. Dữ liệu lưu ở file <b>progress.json</b> trong repo, vì repo đang để công khai nên người cố tình tìm vẫn đọc được.</span></div>' +
+      '<div class="stats4"><div class="stat"><b>' + cnt["dang-hoc"] + '</b><span>đang học</span></div><div class="stat"><b>' + avg + '%</b><span>tiến độ TB khóa đang học</span></div>' +
+      '<div class="stat"><b>' + cnt["da-xong"] + '</b><span>đã xong</span></div><div class="stat"><b>' + cnt["muon-hoc"] + '</b><span>muốn học</span></div></div>' +
+      '<div class="filterbar"><select id="pf"><option value="">Tất cả trạng thái</option>' +
+      Object.keys(ST).map(function (k) { return '<option value="' + k + '"' + (k === pFilter ? " selected" : "") + ">" + ST[k] + "</option>"; }).join("") + "</select></div>";
+    if (!idxs.length) html += '<div class="empty">' + (P.length ? "Không có khóa nào ở trạng thái này." : "Chưa theo dõi khóa nào. Bấm \"+ Theo dõi khóa\" để chọn từ thư viện tài nguyên.") + "</div>";
+    else html += '<div class="list">' + idxs.map(function (i) {
+      var p = P[i], r = resByLink(p.link), name = r ? r.ten : (p.ten || p.link), pct = Math.max(0, Math.min(100, +p.tienDo || 0));
+      var meta = [];
+      if (r) meta.push([r.chuDe, r.loai].filter(Boolean).join(" · ")); else meta.push("Đã gỡ khỏi thư viện");
+      if (p.ngayBatDau && p.ngayXong) meta.push("Học trong " + (daysBetween(p.ngayBatDau, p.ngayXong) + 1) + " ngày");
+      else if (p.ngayBatDau && p.trangThai === "dang-hoc") meta.push("Đã học " + (daysBetween(p.ngayBatDau, today()) + 1) + " ngày");
+      return '<div class="pcard"><div><div class="pcard__name"><a href="' + esc(p.link) + '" target="_blank" rel="noopener">' + esc(name) + ' ↗</a></div><div class="pcard__meta">' + esc(meta.join(" · ")) + "</div></div>" +
+        '<div style="display:flex;gap:6px;align-items:center"><span class="st st--' + esc(p.trangThai) + '">' + (ST[p.trangThai] || "") + '</span><button class="icon" data-pdel="' + i + '" aria-label="Bỏ theo dõi">🗑</button></div>' +
+        '<div class="bar"><span style="width:' + pct + '%"></span></div>' +
+        '<div class="pcard__ctl"><label>Trạng thái<select data-p="' + i + '" data-k="trangThai">' +
+        Object.keys(ST).map(function (k) { return '<option value="' + k + '"' + (k === p.trangThai ? " selected" : "") + ">" + ST[k] + "</option>"; }).join("") + "</select></label>" +
+        '<label class="prog-wrap">Hoàn thành<span class="prog"><input type="range" min="0" max="100" step="5" value="' + pct + '" data-p="' + i + '" data-k="tienDo"><output>' + pct + "%</output></span></label>" +
+        '<label>Ngày bắt đầu<input type="date" value="' + esc(p.ngayBatDau || "") + '" data-p="' + i + '" data-k="ngayBatDau"></label>' +
+        '<label>Ngày hoàn thành<input type="date" value="' + esc(p.ngayXong || "") + '" data-p="' + i + '" data-k="ngayXong"></label></div></div>';
+    }).join("") + "</div>";
+    $("panel").innerHTML = html;
+
+    $("pf").addEventListener("change", function () { pFilter = this.value; renderProgress(); });
+    $("panel").querySelectorAll("[data-pdel]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var i = +b.getAttribute("data-pdel"); var r = resByLink(P[i].link);
+        if (confirm("Bỏ theo dõi \"" + (r ? r.ten : P[i].ten) + "\"? Tài nguyên vẫn giữ trong thư viện.")) { P.splice(i, 1); setDirty(); renderProgress(); }
+      });
+    });
+    $("panel").querySelectorAll("[data-p]").forEach(function (el) {
+      var i = +el.getAttribute("data-p"), k = el.getAttribute("data-k");
+      if (k === "tienDo") el.addEventListener("input", function () { el.nextElementSibling.textContent = el.value + "%"; el.closest(".pcard").querySelector(".bar span").style.width = el.value + "%"; });
+      el.addEventListener("change", function () {
+        var p = P[i], v = el.value;
+        if (k === "tienDo") {
+          p.tienDo = +v;
+          if (p.tienDo >= 100) { p.trangThai = "da-xong"; if (!p.ngayXong) p.ngayXong = today(); }
+          else if (p.tienDo > 0 && p.trangThai !== "dang-hoc") { p.trangThai = "dang-hoc"; p.ngayXong = ""; }
+          if (p.tienDo > 0 && !p.ngayBatDau) p.ngayBatDau = today();
+        } else if (k === "trangThai") {
+          p.trangThai = v;
+          if (v === "dang-hoc") { if (!p.ngayBatDau) p.ngayBatDau = today(); p.ngayXong = ""; if (p.tienDo >= 100) p.tienDo = 90; }
+          if (v === "da-xong") { p.tienDo = 100; if (!p.ngayXong) p.ngayXong = today(); if (!p.ngayBatDau) p.ngayBatDau = p.ngayXong; }
+          if (v === "muon-hoc") { p.tienDo = 0; p.ngayBatDau = ""; p.ngayXong = ""; }
+        } else { p[k] = v; }
+        var r = resByLink(p.link); if (r) p.ten = r.ten;
+        setDirty(); renderProgress();
+      });
+    });
+    $("addBtn").addEventListener("click", function () {
+      var tracked = {}; P.forEach(function (p) { tracked[p.link] = 1; });
+      var avail = D.resources.filter(function (r) { return !tracked[r.link]; });
+      if (!avail.length) { alert("Tất cả tài nguyên đều đã được theo dõi."); return; }
+      var labels = avail.map(function (r) { return r.ten + " · " + (r.chuDe || ""); });
+      openForm("Theo dõi khóa", [
+        { k: "res", label: "Chọn tài nguyên", type: "select", options: labels, full: true, hint: "Chưa có trong danh sách? Thêm ở tab Tài nguyên trước." },
+        { k: "trangThai", label: "Trạng thái", type: "select", options: ["Đang học", "Muốn học", "Đã xong"] },
+        { k: "tienDo", label: "Hoàn thành (%)", type: "number", def: "0" },
+        { k: "ngayBatDau", label: "Ngày bắt đầu", type: "date", def: today() }
+      ], null, function (o) {
+        var r = avail[labels.indexOf(o.res)]; if (!r) return;
+        var stMap = { "Đang học": "dang-hoc", "Muốn học": "muon-hoc", "Đã xong": "da-xong" }, st = stMap[o.trangThai] || "dang-hoc";
+        var pct = Math.max(0, Math.min(100, parseInt(o.tienDo, 10) || 0));
+        if (st === "da-xong") pct = 100; if (st === "muon-hoc") pct = 0;
+        P.unshift({ link: r.link, ten: r.ten, trangThai: st, tienDo: pct, ngayBatDau: st === "muon-hoc" ? "" : (o.ngayBatDau || today()), ngayXong: st === "da-xong" ? today() : "" });
+      });
+    });
+  }
+
   function render() {
     document.querySelectorAll(".tab").forEach(function (t) { t.setAttribute("aria-selected", t.getAttribute("data-tab") === tab ? "true" : "false"); });
-    ({ resources: renderResources, categories: renderCategories, posts: renderPosts, tools: renderTools, profile: renderProfile })[tab]();
+    ({ progress: renderProgress, resources: renderResources, categories: renderCategories, posts: renderPosts, tools: renderTools, profile: renderProfile })[tab]();
   }
   document.querySelectorAll(".tab").forEach(function (t) {
     t.addEventListener("click", function () { tab = t.getAttribute("data-tab"); render(); });
