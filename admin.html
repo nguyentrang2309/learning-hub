@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Quản trị | Learning Hubs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf7f2;--surface:#fff;--surface-2:#f2ede4;--text:#1d2420;--muted:#5d665f;--line:#e4ddd1;--accent:#1f5c4a;--accent-soft:#e1ede7;--warm:#c8643b;--warm-soft:#f8e6dc;--danger:#b3261e;--danger-soft:#fbe4e2;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#141816;--surface:#1c211e;--surface-2:#232925;--text:#ecefea;--muted:#a3ada6;--line:#2f3632;--accent:#7cc4a8;--accent-soft:#1f3129;--warm:#f0996f;--warm-soft:#3a2519;--danger:#f2b8b5;--danger-soft:#3b1a18;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Be Vietnam Pro",system-ui,sans-serif;font-size:15px;line-height:1.55}
+a{color:var(--accent)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+button,input,select,textarea{font:inherit;color:inherit}
+.btn{cursor:pointer;border:1px solid var(--line);background:var(--surface);padding:8px 14px;border-radius:10px;font-weight:600;font-size:14px}
+.btn:hover{border-color:var(--accent)}
+.btn--primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.btn--primary:disabled{opacity:.45;cursor:default}
+.btn--danger{color:var(--danger)}
+.btn--sm{padding:5px 10px;font-size:13px;border-radius:8px}
+.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top__in{display:flex;align-items:center;gap:12px;height:62px}
+.top h1{font-family:Lora,Georgia,serif;font-size:20px;margin:0;font-weight:600;white-space:nowrap}
+.top__sp{flex:1}
+.pill{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.pill--dirty{background:var(--warm-soft);color:var(--warm)}
+.pill--ok{background:var(--accent-soft);color:var(--accent)}
+.tabs{display:flex;gap:4px;overflow-x:auto;padding:14px 0 0}
+.tab{cursor:pointer;border:0;background:none;padding:8px 14px;border-radius:999px;font-weight:500;color:var(--muted);white-space:nowrap}
+.tab[aria-selected=true]{background:var(--accent);color:var(--bg)}
+.panel{padding:20px 0 80px}
+.panel__head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+.panel__head h2{margin:0;font-size:20px}
+.hint{color:var(--muted);font-size:13px;margin:4px 0 0}
+.list{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.row__main{flex:1;min-width:0}
+.row__title{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row__meta{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row__act{display:flex;gap:4px;flex:none}
+.icon{cursor:pointer;border:1px solid var(--line);background:var(--surface);width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-size:14px}
+.icon:hover{border-color:var(--accent)}
+.icon:disabled{opacity:.3;cursor:default}
+.filterbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.filterbar input,.filterbar select{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 12px}
+.filterbar input{flex:1 1 220px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}
+.f{display:flex;flex-direction:column;gap:4px}
+.f--full{grid-column:1/-1}
+.f label{font-size:13px;font-weight:600}
+.f small{color:var(--muted);font-size:12px}
+.f input,.f select,.f textarea{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 12px;width:100%}
+.f textarea{min-height:84px;resize:vertical}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--accent-soft);border-color:var(--accent)}
+.check{display:flex;align-items:center;gap:8px;font-weight:500}
+.f .check input,.check input{width:auto;flex:none;width:18px;height:18px;accent-color:var(--accent)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px}
+dialog{border:0;border-radius:18px;padding:0;width:min(640px,calc(100vw - 24px));background:var(--surface);color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.25)}
+dialog::backdrop{background:rgba(20,24,22,.45)}
+.dlg__head{padding:18px 20px 0;display:flex;justify-content:space-between;align-items:center}
+.dlg__head h3{margin:0;font-size:18px}
+.dlg__body{padding:16px 20px;max-height:70vh;overflow:auto}
+.dlg__foot{padding:12px 20px 18px;display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--line)}
+.login{max-width:520px;margin:8vh auto;padding:0 20px}
+.login h1{font-family:Lora,Georgia,serif;font-weight:600;font-size:30px;margin:0 0 6px}
+.login ol{padding-left:20px;color:var(--muted);font-size:14px}
+.login ol li{margin-bottom:6px}
+.msg{padding:10px 14px;border-radius:10px;font-size:14px;margin:12px 0}
+.msg--err{background:var(--danger-soft);color:var(--danger)}
+.msg--ok{background:var(--accent-soft);color:var(--accent)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;font-weight:500;z-index:50;max-width:calc(100vw - 32px)}
+.empty{color:var(--muted);text-align:center;padding:30px;border:1px dashed var(--line);border-radius:12px}
+@media (max-width:640px){#saveBtn{padding:8px 12px}.top__in{gap:8px}.wrap{padding-left:16px;padding-right:16px}.form{grid-template-columns:1fr}.top h1{font-size:17px}.hide-sm{display:none}}
+</style>
+</head>
+<body>
+
+<!-- ============ MÀN HÌNH ĐĂNG NHẬP ============ -->
+<section id="loginView" class="login" hidden>
+  <h1>Quản trị Learning Hubs</h1>
+  <p class="hint" style="font-size:15px">Chỉ người có mã khóa GitHub (token) của repo mới sửa được nội dung.</p>
+  <div class="card" style="margin-top:20px">
+    <div class="f">
+      <label for="tokenInput">Mã khóa GitHub (token)</label>
+      <input id="tokenInput" type="password" placeholder="github_pat_..." autocomplete="off">
+    </div>
+    <label class="check" style="margin-top:12px"><input type="checkbox" id="rememberChk" checked> Ghi nhớ trên máy này</label>
+    <div id="loginMsg"></div>
+    <button class="btn btn--primary" id="loginBtn" style="margin-top:14px;width:100%">Đăng nhập</button>
+  </div>
+  <details style="margin-top:20px">
+    <summary style="cursor:pointer;font-weight:600">Chưa có mã khóa? Cách tạo (3 phút)</summary>
+    <ol>
+      <li>Mở <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">trang tạo token</a> (đăng nhập GitHub).</li>
+      <li><b>Token name:</b> learning-hub-admin. <b>Expiration:</b> chọn 90 days hoặc 1 year.</li>
+      <li><b>Repository access:</b> Only select repositories → chọn <b>learning-hub</b>.</li>
+      <li><b>Permissions → Repository permissions → Contents:</b> chọn <b>Read and write</b>. Không cần quyền nào khác.</li>
+      <li>Bấm <b>Generate token</b>, copy mã <code>github_pat_...</code> dán vào ô bên trên.</li>
+    </ol>
+    <p class="hint">Mã chỉ lưu trong trình duyệt của bạn, không gửi đi đâu ngoài GitHub. Không chia sẻ mã này cho ai.</p>
+  </details>
+</section>
+
+<!-- ============ MÀN HÌNH QUẢN TRỊ ============ -->
+<div id="appView" hidden>
+  <header class="top">
+    <div class="wrap top__in">
+      <h1>Quản trị</h1>
+      <span class="pill hide-sm" id="stateBadge">Đã đồng bộ</span>
+      <span class="top__sp"></span>
+      <a class="btn btn--sm hide-sm" href="./" target="_blank" rel="noopener">Xem web ↗</a>
+      <button class="btn btn--sm" id="logoutBtn" title="Đăng xuất">Thoát</button>
+      <button class="btn btn--primary" id="saveBtn" disabled style="white-space:nowrap">Lưu & xuất bản</button>
+    </div>
+  </header>
+  <main class="wrap">
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="resources" aria-selected="true">Tài nguyên</button>
+      <button class="tab" role="tab" data-tab="categories" aria-selected="false">3 mảng chính</button>
+      <button class="tab" role="tab" data-tab="posts" aria-selected="false">Bài Substack ghim</button>
+      <button class="tab" role="tab" data-tab="tools" aria-selected="false">Công cụ</button>
+      <button class="tab" role="tab" data-tab="profile" aria-selected="false">Thông tin cá nhân</button>
+    </nav>
+    <section class="panel" id="panel"></section>
+  </main>
+</div>
+
+<dialog id="dlg">
+  <form method="dialog" id="dlgForm">
+    <div class="dlg__head"><h3 id="dlgTitle"></h3><button class="icon" value="cancel" aria-label="Đóng">✕</button></div>
+    <div class="dlg__body"><div class="form" id="dlgFields"></div></div>
+    <div class="dlg__foot"><button class="btn" value="cancel">Hủy</button><button class="btn btn--primary" value="ok" id="dlgOk">Xong</button></div>
+  </form>
+</dialog>
+
+<script>
+(function () {
+  var OWNER = "nguyentrang2309", REPO = "learning-hub", BRANCH = "main", FILE = "data.js";
+  var API = "https://api.github.com/repos/" + OWNER + "/" + REPO;
+  var KEY = "lh_admin_token";
+
+  var token = "", sha = "", D = null, dirty = false, tab = "resources", rFilter = { q: "", topic: "" };
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+
+  /* ---------- lưu token ---------- */
+  function getSaved() { try { return localStorage.getItem(KEY) || sessionStorage.getItem(KEY) || ""; } catch (e) { return ""; } }
+  function saveToken(t, remember) {
+    try { localStorage.removeItem(KEY); sessionStorage.removeItem(KEY); (remember ? localStorage : sessionStorage).setItem(KEY, t); } catch (e) {}
+  }
+  function clearToken() { try { localStorage.removeItem(KEY); sessionStorage.removeItem(KEY); } catch (e) {} }
+
+  /* ---------- GitHub API ---------- */
+  function gh(path, opt) {
+    opt = opt || {};
+    var h = { "Accept": "application/vnd.github+json", "Authorization": "Bearer " + token, "X-GitHub-Api-Version": "2022-11-28" };
+    if (opt.body) h["Content-Type"] = "application/json";
+    return fetch(API + path, { method: opt.method || "GET", headers: h, body: opt.body ? JSON.stringify(opt.body) : undefined, cache: "no-store" })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { j.__status = r.status; return j; }); });
+  }
+  function b64ToUtf8(b) { var bin = atob(b.replace(/\s/g, "")); var u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new TextDecoder().decode(u); }
+  function utf8ToB64(s) { var u = new TextEncoder().encode(s), bin = ""; for (var i = 0; i < u.length; i += 0x8000) bin += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(bin); }
+
+  function parseData(text) {
+    var w = {}; (new Function("window", text))(w);
+    return {
+      profile: w.HUB_PROFILE || {}, categories: w.HUB_CATEGORIES || [], posts: w.HUB_POSTS_GHIM || [],
+      resources: w.HUB_RESOURCES || [], tools: w.HUB_TOOLS || []
+    };
+  }
+  function buildData(d) {
+    var j = function (v) { return JSON.stringify(v, null, 2); };
+    return "/* =========================================================\n" +
+      "   FILE DỮ LIỆU CỦA LEARNING HUB\n" +
+      "   Cách dễ nhất để sửa: mở trang quản trị  admin.html\n" +
+      "   (https://" + OWNER + ".github.io/" + REPO + "/admin.html)\n" +
+      "   Nếu sửa tay: chữ luôn trong dấu nháy kép, giữ nguyên dấu phẩy, ngoặc.\n" +
+      "   ========================================================= */\n\n" +
+      "/* 1. Thông tin cá nhân */\nwindow.HUB_PROFILE = " + j(d.profile) + ";\n\n" +
+      "/* 2. Ba mảng chính (ten phải trùng chuDe của tài nguyên) */\nwindow.HUB_CATEGORIES = " + j(d.categories) + ";\n\n" +
+      "/* 2b. Bài Substack ghim (bài mới nhất tự điền phần còn lại) */\nwindow.HUB_POSTS_GHIM = " + j(d.posts) + ";\n\n" +
+      "/* 3. Tài nguyên đề xuất */\nwindow.HUB_RESOURCES = " + j(d.resources) + ";\n\n" +
+      "/* 4. Công cụ mình dùng */\nwindow.HUB_TOOLS = " + j(d.tools) + ";\n";
+  }
+
+  /* ---------- trạng thái ---------- */
+  function toast(t, ms) {
+    var el = document.createElement("div"); el.className = "toast"; el.textContent = t; document.body.appendChild(el);
+    setTimeout(function () { el.remove(); }, ms || 2600);
+  }
+  function setDirty(v) {
+    dirty = v; $("saveBtn").disabled = !v;
+    var b = $("stateBadge"); b.textContent = v ? "Có thay đổi chưa lưu" : "Đã đồng bộ"; b.className = "pill hide-sm " + (v ? "pill--dirty" : "pill--ok");
+  }
+  window.addEventListener("beforeunload", function (e) { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+
+  /* ---------- đăng nhập ---------- */
+  function showLogin(msg) {
+    $("appView").hidden = true; $("loginView").hidden = false;
+    $("loginMsg").innerHTML = msg ? '<div class="msg msg--err">' + esc(msg) + "</div>" : "";
+  }
+  function load() {
+    return gh("/contents/" + FILE + "?ref=" + BRANCH).then(function (r) {
+      if (r.__status === 401) throw new Error("Mã khóa không đúng hoặc đã hết hạn.");
+      if (r.__status === 404) throw new Error("Mã khóa không có quyền vào repo learning-hub.");
+      if (!r.content) throw new Error("Không đọc được dữ liệu (lỗi " + r.__status + ").");
+      sha = r.sha; D = parseData(b64ToUtf8(r.content));
+    });
+  }
+  function checkWrite() {
+    return gh("").then(function (r) {
+      if (r.permissions && r.permissions.push === false) throw new Error("Mã khóa chỉ có quyền đọc. Cần quyền Contents: Read and write.");
+    });
+  }
+  function enter() {
+    $("loginBtn").disabled = true; $("loginBtn").textContent = "Đang kiểm tra...";
+    load().then(checkWrite).then(function () {
+      $("loginView").hidden = true; $("appView").hidden = false; setDirty(false); render();
+    }).catch(function (e) {
+      clearToken(); token = ""; showLogin(e.message);
+    }).then(function () { $("loginBtn").disabled = false; $("loginBtn").textContent = "Đăng nhập"; });
+  }
+  $("loginBtn").addEventListener("click", function () {
+    var t = $("tokenInput").value.trim();
+    if (!t) { showLogin("Hãy dán mã khóa vào ô trên."); return; }
+    token = t; saveToken(t, $("rememberChk").checked); $("tokenInput").value = ""; enter();
+  });
+  $("tokenInput").addEventListener("keydown", function (e) { if (e.key === "Enter") $("loginBtn").click(); });
+  $("logoutBtn").addEventListener("click", function () {
+    if (dirty && !confirm("Còn thay đổi chưa lưu. Vẫn đăng xuất?")) return;
+    clearToken(); token = ""; D = null; setDirty(false); showLogin("");
+  });
+
+  /* ---------- lưu ---------- */
+  $("saveBtn").addEventListener("click", function () {
+    var btn = this; btn.disabled = true; btn.textContent = "Đang lưu...";
+    var now = new Date(); D.profile.capNhatLanCuoi = ("0" + now.getDate()).slice(-2) + "/" + ("0" + (now.getMonth() + 1)).slice(-2) + "/" + now.getFullYear();
+    gh("/contents/" + FILE, { method: "PUT", body: { message: "Cập nhật nội dung từ trang quản trị", content: utf8ToB64(buildData(D)), sha: sha, branch: BRANCH } })
+      .then(function (r) {
+        if (r.__status === 409 || r.__status === 422) throw new Error("conflict");
+        if (r.__status === 401) throw new Error("Mã khóa hết hạn. Hãy đăng nhập lại.");
+        if (r.__status === 403) throw new Error("Mã khóa không có quyền ghi (cần Contents: Read and write).");
+        if (!r.content) throw new Error("Lưu không thành công (lỗi " + r.__status + ").");
+        sha = r.content.sha; setDirty(false);
+        toast("Đã lưu. Web cập nhật sau khoảng 1-2 phút.", 4000);
+      })
+      .catch(function (e) {
+        if (e.message === "conflict") {
+          alert("Dữ liệu trên GitHub vừa được sửa ở nơi khác. Trang sẽ tải lại bản mới nhất, thay đổi chưa lưu của bạn sẽ mất.");
+          load().then(function () { setDirty(false); render(); });
+        } else { alert(e.message); }
+        if (dirty) btn.disabled = false;
+      })
+      .then(function () { btn.textContent = "Lưu & xuất bản"; });
+  });
+
+  /* ---------- form dùng chung ---------- */
+  var TOPIC_FALLBACK = ["Growth Marketing & AI", "Content & Social", "Insurtech / Bảo hiểm"];
+  var LOAI = ["Khóa học", "Sách", "Ebook", "Video", "Newsletter", "Báo cáo", "Case study", "Template", "Lộ trình", "Công cụ học", "Podcast"];
+  function topics() { var t = D.categories.map(function (c) { return c.ten; }).filter(Boolean); return t.length ? t : TOPIC_FALLBACK; }
+  function uniq(a) { return a.filter(function (v, i) { return v && a.indexOf(v) === i; }); }
+
+  function fieldHtml(f, val) {
+    var id = "fld_" + f.k, full = f.full ? " f--full" : "", v = val == null ? "" : val;
+    var hint = f.hint ? "<small>" + esc(f.hint) + "</small>" : "";
+    if (f.type === "check") return '<div class="f' + full + '"><label class="check"><input type="checkbox" id="' + id + '"' + (v ? " checked" : "") + "> " + esc(f.label) + "</label>" + hint + "</div>";
+    var ctl;
+    if (f.type === "select") {
+      var opts = f.options.slice(); if (v && opts.indexOf(v) < 0) opts.unshift(v);
+      ctl = '<select id="' + id + '">' + opts.map(function (o) { return "<option" + (o === v ? " selected" : "") + ">" + esc(o) + "</option>"; }).join("") + "</select>";
+    } else if (f.type === "textarea") {
+      ctl = '<textarea id="' + id + '"' + (f.req ? " required" : "") + ">" + esc(v) + "</textarea>";
+    } else if (f.type === "combo") {
+      ctl = '<input id="' + id + '" list="' + id + '_l" value="' + esc(v) + '"><datalist id="' + id + '_l">' + f.options.map(function (o) { return '<option value="' + esc(o) + '">'; }).join("") + "</datalist>";
+    } else {
+      ctl = '<input id="' + id + '" type="' + (f.type || "text") + '" value="' + esc(Array.isArray(v) ? v.join(", ") : v) + '"' + (f.req ? " required" : "") + (f.ph ? ' placeholder="' + esc(f.ph) + '"' : "") + ">";
+    }
+    return '<div class="f' + full + '"><label for="' + id + '">' + esc(f.label) + (f.req ? " *" : "") + "</label>" + ctl + hint + "</div>";
+  }
+  function readFields(fields) {
+    var o = {};
+    fields.forEach(function (f) {
+      var el = $("fld_" + f.k);
+      if (f.type === "check") { if (el.checked) o[f.k] = true; return; }
+      var v = el.value.trim();
+      if (f.type === "list") v = v.split(",").map(function (s) { return s.trim(); }).filter(Boolean);
+      o[f.k] = v;
+    });
+    return o;
+  }
+  function openForm(title, fields, item, onOk) {
+    $("dlgTitle").textContent = title;
+    $("dlgFields").innerHTML = fields.map(function (f) { return fieldHtml(f, item ? item[f.k] : f.def); }).join("");
+    var dlg = $("dlg");
+    dlg.onclose = function () {
+      if (dlg.returnValue !== "ok") return;
+      var o = readFields(fields);
+      var miss = fields.filter(function (f) { return f.req && !o[f.k]; });
+      if (miss.length) { alert("Thiếu: " + miss.map(function (f) { return f.label; }).join(", ")); return; }
+      onOk(o); setDirty(true); render();
+    };
+    dlg.returnValue = ""; dlg.showModal();
+    var first = $("dlgFields").querySelector("input,textarea,select"); if (first) first.focus();
+  }
+
+  /* ---------- danh sách dùng chung ---------- */
+  function listHtml(arr, idxs, titleFn, metaFn) {
+    if (!idxs.length) return '<div class="empty">Chưa có mục nào.</div>';
+    return '<div class="list">' + idxs.map(function (i) {
+      var it = arr[i];
+      return '<div class="row"><div class="row__main"><div class="row__title">' + esc(titleFn(it)) + '</div><div class="row__meta">' + esc(metaFn(it)) + "</div></div>" +
+        '<div class="row__act"><button class="icon" data-act="up" data-i="' + i + '"' + (i === 0 ? " disabled" : "") + ' aria-label="Lên">↑</button>' +
+        '<button class="icon" data-act="down" data-i="' + i + '"' + (i === arr.length - 1 ? " disabled" : "") + ' aria-label="Xuống">↓</button>' +
+        '<button class="icon" data-act="edit" data-i="' + i + '" aria-label="Sửa">✎</button>' +
+        '<button class="icon btn--danger" data-act="del" data-i="' + i + '" aria-label="Xóa">🗑</button></div></div>';
+    }).join("") + "</div>";
+  }
+  function bindList(arr, fields, label, nameFn, onEdited) {
+    $("panel").querySelectorAll("[data-act]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var i = +b.getAttribute("data-i"), a = b.getAttribute("data-act");
+        if (a === "up" && i > 0) { var t = arr[i - 1]; arr[i - 1] = arr[i]; arr[i] = t; setDirty(true); render(); }
+        if (a === "down" && i < arr.length - 1) { var t2 = arr[i + 1]; arr[i + 1] = arr[i]; arr[i] = t2; setDirty(true); render(); }
+        if (a === "edit") { var old = arr[i]; openForm("Sửa " + label, fields(), old, function (o) { arr[i] = o; if (onEdited) onEdited(old, o); }); }
+        if (a === "del" && confirm("Xóa \"" + nameFn(arr[i]) + "\"?")) { arr.splice(i, 1); setDirty(true); render(); }
+      });
+    });
+    var add = $("addBtn");
+    if (add) add.addEventListener("click", function () { openForm("Thêm " + label, fields(), null, function (o) { arr.unshift(o); }); });
+  }
+  function head(title, hint, addLabel) {
+    return '<div class="panel__head"><div><h2>' + esc(title) + '</h2><p class="hint">' + hint + "</p></div>" +
+      (addLabel ? '<button class="btn btn--primary" id="addBtn">+ ' + esc(addLabel) + "</button>" : "") + "</div>";
+  }
+
+  /* ---------- các tab ---------- */
+  function resFields() {
+    return [
+      { k: "ten", label: "Tên", req: true, full: true },
+      { k: "nguon", label: "Tác giả / đơn vị" },
+      { k: "link", label: "Link", type: "url", req: true, ph: "https://..." },
+      { k: "chuDe", label: "Chủ đề (mảng)", type: "select", options: topics() },
+      { k: "loai", label: "Loại", type: "combo", options: uniq(LOAI.concat(D.resources.map(function (r) { return r.loai; }))), def: "Khóa học", hint: "Chọn sẵn hoặc gõ loại mới" },
+      { k: "capDo", label: "Cấp độ", type: "select", options: ["Cơ bản", "Trung cấp", "Nâng cao"] },
+      { k: "truyCap", label: "Truy cập", type: "select", options: ["Miễn phí", "Trả phí", "Freemium"] },
+      { k: "moTa", label: "Mô tả", type: "textarea", full: true, hint: "1-2 câu: vì sao nên xem, học xong được gì" },
+      { k: "noiBat", label: "Gắn nhãn \"Nên xem trước\" (đẩy lên đầu)", type: "check", full: true }
+    ];
+  }
+  function catFields() {
+    return [
+      { k: "ten", label: "Tên mảng", req: true, hint: "Đổi tên sẽ tự đổi chủ đề của các tài nguyên thuộc mảng" },
+      { k: "bieuTuong", label: "Biểu tượng (emoji)", hint: "Windows: phím Win + . để chọn" },
+      { k: "moTa", label: "Mô tả", type: "textarea", full: true },
+      { k: "noiDung", label: "Chủ đề con", type: "list", full: true, hint: "Cách nhau bằng dấu phẩy" }
+    ];
+  }
+  function postFields() {
+    return [
+      { k: "link", label: "Link bài Substack", type: "url", req: true, full: true, ph: "https://tranggrowthnotes.substack.com/p/..." },
+      { k: "tieuDe", label: "Tiêu đề (để trống = tự lấy)", full: true },
+      { k: "moTa", label: "Mô tả (để trống = tự lấy)", type: "textarea", full: true },
+      { k: "anh", label: "Link ảnh bìa (để trống = tự lấy)", type: "url", full: true }
+    ];
+  }
+  function toolFields() {
+    return [
+      { k: "ten", label: "Tên công cụ", req: true },
+      { k: "link", label: "Link", type: "url", req: true },
+      { k: "nhom", label: "Nhóm", type: "combo", options: uniq(D.tools.map(function (t) { return t.nhom; })) },
+      { k: "moTa", label: "Dùng để làm gì", type: "textarea", full: true }
+    ];
+  }
+
+  function renderResources() {
+    var idxs = [];
+    var q = rFilter.q.toLowerCase();
+    D.resources.forEach(function (r, i) {
+      if (rFilter.topic && r.chuDe !== rFilter.topic) return;
+      if (q && (r.ten + " " + r.nguon + " " + r.moTa).toLowerCase().indexOf(q) < 0) return;
+      idxs.push(i);
+    });
+    $("panel").innerHTML = head("Tài nguyên (" + D.resources.length + ")", "Mục mới thêm sẽ nằm đầu danh sách. Dùng ↑ ↓ để đổi thứ tự.", "Thêm tài nguyên") +
+      '<div class="filterbar"><input id="rq" placeholder="Tìm theo tên, nguồn..." value="' + esc(rFilter.q) + '"><select id="rt"><option value="">Tất cả mảng</option>' +
+      topics().map(function (t) { return "<option" + (t === rFilter.topic ? " selected" : "") + ">" + esc(t) + "</option>"; }).join("") + "</select></div>" +
+      listHtml(D.resources, idxs, function (r) { return (r.noiBat ? "★ " : "") + r.ten; }, function (r) { return [r.chuDe, r.loai, r.capDo, r.truyCap, r.nguon].filter(Boolean).join(" · "); });
+    bindList(D.resources, resFields, "tài nguyên", function (r) { return r.ten; });
+    $("rq").addEventListener("input", function () { rFilter.q = this.value; var p = this.selectionStart; renderResources(); var el = $("rq"); el.focus(); el.setSelectionRange(p, p); });
+    $("rt").addEventListener("change", function () { rFilter.topic = this.value; renderResources(); });
+  }
+  function renderCategories() {
+    $("panel").innerHTML = head("3 mảng chính", "Hiện ở mục \"Mình đang học gì\" và thẻ tổng quan đầu trang.", "Thêm mảng") +
+      listHtml(D.categories, D.categories.map(function (_, i) { return i; }), function (c) { return (c.bieuTuong || "") + " " + c.ten; }, function (c) {
+        var n = D.resources.filter(function (r) { return r.chuDe === c.ten; }).length; return n + " tài nguyên · " + (c.noiDung || []).join(", ");
+      });
+    bindList(D.categories, catFields, "mảng", function (c) { return c.ten; }, function (old, o) {
+      if (o.ten !== old.ten) D.resources.forEach(function (r) { if (r.chuDe === old.ten) r.chuDe = o.ten; });
+    });
+  }
+  function renderPosts() {
+    $("panel").innerHTML = head("Bài Substack ghim", "Bài ghim hiện đầu, nhãn \"Nổi bật\". Chỗ còn trống (tối đa 6) web tự điền bài mới nhất.", "Ghim bài") +
+      listHtml(D.posts, D.posts.map(function (_, i) { return i; }), function (p) { return p.tieuDe || p.link; }, function (p) { return p.tieuDe ? p.link : "Tiêu đề tự lấy từ Substack"; });
+    bindList(D.posts, postFields, "bài ghim", function (p) { return p.tieuDe || p.link; });
+  }
+  function renderTools() {
+    $("panel").innerHTML = head("Công cụ (" + D.tools.length + ")", "Hiện ở mục \"Công cụ mình dùng\".", "Thêm công cụ") +
+      listHtml(D.tools, D.tools.map(function (_, i) { return i; }), function (t) { return t.ten; }, function (t) { return [t.nhom, t.moTa].filter(Boolean).join(" · "); });
+    bindList(D.tools, toolFields, "công cụ", function (t) { return t.ten; });
+  }
+  function renderProfile() {
+    var fields = [
+      { k: "ten", label: "Tên hiển thị", req: true },
+      { k: "tenThuVien", label: "Tiêu đề lớn", hint: "Phần sau tên tự in nghiêng màu xanh" },
+      { k: "khauHieu", label: "Dòng chữ nhỏ trên tiêu đề", full: true },
+      { k: "gioiThieu", label: "Đoạn giới thiệu đầu trang", type: "textarea", full: true },
+      { k: "bio", label: "Giới thiệu ở chân trang", type: "textarea", full: true },
+      { k: "substack", label: "Link Substack", type: "url" },
+      { k: "facebook", label: "Link Facebook", type: "url" },
+      { k: "linkedin", label: "Link LinkedIn", type: "url" },
+      { k: "email", label: "Email liên hệ", type: "email", hint: "Để trống thì nút tự ẩn" }
+    ];
+    $("panel").innerHTML = head("Thông tin cá nhân", "Sửa xong bấm \"Áp dụng\", rồi \"Lưu & xuất bản\" ở góc trên.", "") +
+      '<div class="card"><div class="form">' + fields.map(function (f) { return fieldHtml(f, D.profile[f.k]); }).join("") +
+      '</div><div style="margin-top:16px;display:flex;justify-content:flex-end"><button class="btn btn--primary" id="profOk">Áp dụng</button></div></div>';
+    $("profOk").addEventListener("click", function () {
+      var o = readFields(fields);
+      if (!o.ten) { alert("Thiếu tên hiển thị"); return; }
+      Object.keys(o).forEach(function (k) { D.profile[k] = o[k]; });
+      setDirty(true); toast("Đã áp dụng. Nhớ bấm \"Lưu & xuất bản\".");
+    });
+  }
+  function render() {
+    document.querySelectorAll(".tab").forEach(function (t) { t.setAttribute("aria-selected", t.getAttribute("data-tab") === tab ? "true" : "false"); });
+    ({ resources: renderResources, categories: renderCategories, posts: renderPosts, tools: renderTools, profile: renderProfile })[tab]();
+  }
+  document.querySelectorAll(".tab").forEach(function (t) {
+    t.addEventListener("click", function () { tab = t.getAttribute("data-tab"); render(); });
+  });
+
+  /* ---------- khởi động ---------- */
+  token = getSaved();
+  if (token) { $("loginView").hidden = false; enter(); } else showLogin("");
+})();
+</script>
+</body>
+</html>

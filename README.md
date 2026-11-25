@@ -2,7 +2,39 @@
 
 Trang web: **https://nguyentrang2309.github.io/learning-hub/**
 
-Đây là hướng dẫn tự cập nhật nội dung, **không cần biết code**. Toàn bộ nội dung nằm trong **một file duy nhất: `data.js`**. Các file khác (`index.html`, `style.css`, `app.js`) bạn không cần đụng tới.
+Có **2 cách** cập nhật nội dung:
+
+- **Cách 1 (khuyên dùng): Trang quản trị** tại **https://nguyentrang2309.github.io/learning-hub/admin.html**. Có form thêm / sửa / xóa, không đụng vào code. Xem mục 0 ngay dưới.
+- **Cách 2: Sửa tay file `data.js`** trên GitHub. Xem từ mục 1 trở đi.
+
+---
+
+## 0. Trang quản trị (chỉ admin)
+
+**Đăng nhập lần đầu** (chỉ làm 1 lần trên mỗi máy):
+
+1. Tạo mã khóa GitHub (token): mở https://github.com/settings/personal-access-tokens/new
+   - **Token name:** learning-hub-admin · **Expiration:** 90 days hoặc 1 year
+   - **Repository access:** Only select repositories → chọn **learning-hub**
+   - **Permissions → Repository permissions → Contents:** Read and write (không cần quyền nào khác)
+   - Bấm **Generate token**, copy mã `github_pat_...`
+2. Mở trang quản trị, dán mã vào ô, giữ tích **"Ghi nhớ trên máy này"**, bấm **Đăng nhập**.
+
+**Sửa nội dung:**
+
+- 5 tab: **Tài nguyên · 3 mảng chính · Bài Substack ghim · Công cụ · Thông tin cá nhân**.
+- Nút **+ Thêm**, biểu tượng **✎** để sửa, **🗑** để xóa, **↑ ↓** để đổi thứ tự.
+- Sửa xong bấm **Lưu & xuất bản** (góc trên phải). Khoảng 1-2 phút sau web cập nhật.
+- Đổi tên một mảng thì các tài nguyên thuộc mảng đó tự đổi theo.
+- Ngày "Cập nhật lần cuối" ở chân trang tự điền khi lưu.
+
+**Vì sao chỉ admin sửa được?** Trang quản trị ai cũng mở được, nhưng muốn lưu phải có mã khóa với quyền ghi vào repo. Chỉ tài khoản GitHub của bạn tạo được mã đó.
+
+**Bảo mật mã khóa:**
+- Không gửi mã cho ai, không dán vào chat.
+- Dùng máy chung / máy người khác: bỏ tích "Ghi nhớ", xong bấm **Thoát**.
+- Nghi lộ mã: vào https://github.com/settings/personal-access-tokens → xóa mã đó → tạo mã mới.
+- Mã hết hạn: trang báo "Mã khóa không đúng hoặc đã hết hạn" → tạo mã mới và đăng nhập lại.
 
 ---
 
@@ -61,10 +93,7 @@ Tìm đoạn `window.HUB_PROFILE = {` ở đầu file.
   },
 ```
 
-**Bước 2.** Dán vào ngay **dưới** dòng chú thích của nhóm phù hợp:
-- `// ===== GROWTH & AI =====`
-- `// ===== CONTENT & SOCIAL =====`
-- `// ===== INSURTECH =====`
+**Bước 2.** Dán vào ngay **dưới** dòng `window.HUB_RESOURCES = [` (mục mới sẽ hiện đầu danh sách).
 
 **Bước 3.** Sửa nội dung. Chọn đúng một trong các giá trị sau:
 
@@ -142,10 +171,11 @@ window.HUB_POSTS_GHIM = [
 ## 9. Câu hỏi thường gặp
 
 **Sửa xong mà trang chưa đổi?**
+
 Đợi 2 phút rồi bấm Ctrl + F5. Vẫn chưa đổi: vào tab **Actions** trên GitHub xem có dòng màu đỏ (lỗi) không.
 
 **Người khác vẫn thấy bản cũ dù mình đã thấy bản mới?**
-Do trình duyệt của họ lưu bản cũ. Muốn ép tải mới: mở `index.html` → tìm 3 chỗ `?v=6` → đổi thành `?v=7` (lần sau `?v=8`...).
+Nội dung (`data.js`) luôn được tải mới. Nếu là thay đổi về giao diện (`style.css`, `app.js`), nhờ Claude tăng số phiên bản `?v=` trong `index.html`.
 
 **Muốn đổi màu, bố cục, thêm mục mới?**
 Phần này nằm trong `style.css` / `app.js`, nhờ Claude sửa sẽ an toàn hơn.
@@ -156,7 +186,8 @@ Phần này nằm trong `style.css` / `app.js`, nhờ Claude sửa sẽ an toàn
 
 | File | Vai trò | Có cần sửa? |
 |---|---|---|
-| `data.js` | Toàn bộ nội dung | ✅ Có |
+| `admin.html` | Trang quản trị | Không |
+| `data.js` | Toàn bộ nội dung (trang quản trị tự ghi vào file này) | Chỉ khi sửa tay |
 | `index.html` | Khung trang | Hiếm khi |
 | `style.css` | Màu sắc, font, bố cục (tự đổi nền tối theo máy) | Không |
 | `app.js` | Tìm kiếm, bộ lọc, lấy bài Substack | Không |
